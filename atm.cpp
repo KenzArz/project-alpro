@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+
 using namespace std;
 #include "db.cpp"
 
@@ -7,7 +9,7 @@ const string endTask = "program berakhir...";
 const int totalNasabah = 5;
 const string kartuATM[4] = {"BCA", "BRI", "BTN", "BJB"};
 const int penarikanDana[4] = {50000, 100000, 500000, 1000000};
-Nasabah biodata_nasabah;
+int nasabahIndex;
 
 // bool checkKartu(int kartu);
 bool checkSandi(int kartu, string sandi, int count=1);
@@ -76,7 +78,7 @@ bool checkSandi(int kartu, string sandi, int count) {
     for(int i = 0; i < totalNasabah; i++) {
         if(nasabah[i].pin == sandi && kartuATM[kartu - 1] == nasabah[i].kartu) {
             isValidSandi = true;
-            biodata_nasabah = nasabah[i];
+            nasabahIndex = i;
         }
     }
     if(!isValidSandi && count < 3) {
@@ -106,19 +108,50 @@ int pilihTransaksi() {
     return transaksiNumber;
 }
 
+void updateDatabaseFile() {
+    ofstream dbFile("db.cpp");  // Membuka file db.cpp untuk ditulis ulang
+
+    if (!dbFile.is_open()) {
+        cerr << "Error: Program tidak dapat memperbaharui data\n";
+        return;
+    }
+
+    dbFile << "struct Nasabah {\n";
+    dbFile << "    string nama;\n";
+    dbFile << "    string kartu;\n";
+    dbFile << "    string pin;\n";
+    dbFile << "    string noRekening;\n";
+    dbFile << "    long saldo;\n";
+    dbFile << "};\n\n";
+    dbFile << "Nasabah nasabah[5] = {\n";
+
+    for (int i = 0; i < totalNasabah; i++) {
+        dbFile << "    {\n";
+        dbFile << "        \"" << nasabah[i].nama << "\",\n";
+        dbFile << "        \"" << nasabah[i].kartu << "\",\n";
+        dbFile << "        \"" << nasabah[i].pin << "\",\n";
+        dbFile << "        \"" << nasabah[i].noRekening << "\",\n";
+        dbFile << "        " << nasabah[i].saldo << "\n";
+        dbFile << "    }" << (i < totalNasabah - 1 ? "," : "") << "\n";
+    }
+    dbFile << "};\n";
+
+    dbFile.close();
+}
+
 int penarikanSaldo() {
     int tarikSaldo;
     cout << "\nRp.50.000 (1) \tRp.100.000 (2)\nRp.500.000 (3) \tRp.1.000.000 (4)\n";
     cout << "Silahkan pilih jumlah penarikkan: ";
     cin >> tarikSaldo;
 
-    if(!(biodata_nasabah.saldo >= penarikanDana[tarikSaldo - 1])) {
+    if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo - 1])) {
         cout << "Saldo anda tidak mencukupi.";
         return 1;
     }
-    cout <<  "\nSaldo sebelum ditarik: " << biodata_nasabah.saldo << endl;
-    biodata_nasabah.saldo -= penarikanDana[tarikSaldo - 1];
-    cout << "Saldo sesudah ditarik: " << biodata_nasabah.saldo << endl;
+    cout <<  "\nSaldo sebelum ditarik: " << nasabah[nasabahIndex].saldo << endl;
+    nasabah[nasabahIndex].saldo -= penarikanDana[tarikSaldo - 1];
+    cout << "Saldo sesudah ditarik: " << nasabah[nasabahIndex].saldo << endl;
+    updateDatabaseFile();
     return 0;
-    
 }

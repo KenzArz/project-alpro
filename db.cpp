@@ -1,5 +1,4 @@
-struct Nasabah
-{
+struct Nasabah {
     string nama;
     string kartu;
     string pin;
@@ -7,40 +6,40 @@ struct Nasabah
     long saldo;
 };
 
-Nasabah nasabah[5] {
+Nasabah nasabah[5] = {
     {
         "Aldi Wijaya",
         "BCA",
         "462666",
         "46266623",
-        100000
+        400000
     },
     {
         "Adil Nugroho",
         "BCA",
         "617283",
         "462666343",
-        7500000,
+        7500000
     },
     {
         "Sakha",
         "BRI",
         "291820",
-         "46266643",
+        "46266643",
         2500000
     },
     {
         "Bajang",
         "BTN",
         "621839",
-         "46266642",
+        "46266642",
         4250000
     },
     {
         "Alfi",
         "BJB",
         "245210",
-         "46266611",
+        "46266611",
         5240000
     }
-}; 
+};
