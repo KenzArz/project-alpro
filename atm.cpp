@@ -31,8 +31,14 @@ int main(){
     cout << "Silahkan masukkan kartu ATM anda berdasarkan nomor di atas: ";
 
     // Program berakhir ketika ATM tidak valid
-    if(!(cin >> kartu) || kartu > 4) {
-        cout << "\nKartu ATM yang anda masukkan tidak valid\n";
+   if(!checkSandi(kartu, sandi)) {
+    cout << "\n====================================\n";
+        cout << "\nREKENIN ANDA TELAH DI BLOKIR\n";
+    cout << "\n=====================================\n";
+    cout << "\n==========================================\n";
+        cout << "\nPIN YANG ANDA MASUKAN SALAH\n";
+        cout << "\nHARAP HUBUNGI ADMIN\n";   
+     cout << "\n==========================================\n";     
         cout << endTask;
         return 1;
     };
