@@ -27,7 +27,7 @@ int main(){
 
     // Memasukkan kartu ATM berdasarkan keinginan user
     cout << "Kartu ATM yang Tersedia di EL-KBMN: " << endl;
-    cout << "BCA (1)\nBRI (2)\nBTN (3)\nBJB (4)" << endl;
+    cout << "1. BCA\n2. BRI\n3. BTN\n4. BJB" << endl;
     cout << "Silahkan masukkan kartu ATM anda berdasarkan nomor di atas: ";
 
     // Program berakhir ketika ATM tidak valid
@@ -43,7 +43,7 @@ int main(){
 
     // Program berakhir ketika sandi tidak valid
     if(!checkSandi(kartu, sandi)) {
-        cout << "\nSandi yang anda masukkan tidak valid\n";
+        cout << "\nSandi yang anda masukkan tidak valid.\n";
         cout << endTask;
         return 1;
     };
@@ -62,12 +62,10 @@ int main(){
         else if(transaksiNumber == 3) {
         }
 
-        cout << "\nyes (1)\nno (0)\n";
+        cout << "\n1. yes\n2. no\n";
         cout << "Apakah ingin melakukan transaksi lagi?: ";
-        if(!(cin >> repeat)) {
-
-        }
-
+        cin >> repeat;
+        
     } while (repeat == 1);
 
     return 0;
@@ -99,7 +97,7 @@ int pilihTransaksi() {
             cin.clear();
             cin.ignore(1000, '\n');
         }
-        cout << "\nTarik Saldo (1)\nTransfer (2)\nLainya (3)\n";
+        cout << "\n1. Tarik Saldo\n2. Transfer\n3. Lainya\n";
         cout << "Silahkan pilih transaksi: ";
         if(!(cin >> transaksiNumber) ||transaksiNumber > 3) {
             cout << "Transaksi yang ada pilih tidak tersedia, coba lagi!\n\n";
@@ -141,17 +139,17 @@ void updateDatabaseFile() {
 
 int penarikanSaldo() {
     int tarikSaldo;
-    cout << "\nRp.50.000 (1) \tRp.100.000 (2)\nRp.500.000 (3) \tRp.1.000.000 (4)\n";
+    cout << "\n1. Rp.50.000 \t2. Rp.100.000 \n3. Rp.500.000 \t4. Rp.1.000.000 \n";
+    
     cout << "Silahkan pilih jumlah penarikkan: ";
     cin >> tarikSaldo;
 
     if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo - 1])) {
-        cout << "Saldo anda tidak mencukupi.";
+        cout << "\nSaldo anda tidak mencukupi.\n";
         return 1;
     }
-    cout <<  "\nSaldo sebelum ditarik: " << nasabah[nasabahIndex].saldo << endl;
     nasabah[nasabahIndex].saldo -= penarikanDana[tarikSaldo - 1];
-    cout << "Saldo sesudah ditarik: " << nasabah[nasabahIndex].saldo << endl;
     updateDatabaseFile();
+    cout << "\nTransaksi Berhasil.\n";
     return 0;
 }

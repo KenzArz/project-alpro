@@ -12,7 +12,7 @@ Nasabah nasabah[5] = {
         "BCA",
         "462666",
         "46266623",
-        400000
+        0
     },
     {
         "Adil Nugroho",
