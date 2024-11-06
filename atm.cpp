@@ -14,7 +14,8 @@ int nasabahIndex;
 // bool checkKartu(int kartu);
 bool checkSandi(int kartu, string sandi, int count = 1);
 int pilihTransaksi();
-void penarikanSaldo();
+string kalkulasiSaldo(string jenisTransfer, int kalkulasi);
+string transferSaldo();
 
 int main(){
     int kartu;
@@ -54,10 +55,10 @@ int main(){
         repeat = 0;
         int transaksiNumber = pilihTransaksi();
         if(transaksiNumber == 1) {
-            penarikanSaldo();
+            cout << kalkulasiSaldo("penarikan", 0);
         }
         else if(transaksiNumber == 2) {
-
+           transferSaldo();
         }
         else if(transaksiNumber == 3) {
         }
@@ -106,12 +107,11 @@ int pilihTransaksi() {
     return transaksiNumber;
 }
 
-void updateDatabaseFile() {
+bool updateDatabaseFile() {
     ofstream dbFile("db.cpp");
 
     if (!dbFile.is_open()) {
-        cerr << "Error: Program tidak dapat memperbaharui data\n";
-        return;
+        return false;
     }
 
     dbFile << "struct Nasabah {\n";
@@ -135,28 +135,41 @@ void updateDatabaseFile() {
     dbFile << "};\n";
 
     dbFile.close();
+    return true;
 }
 
-void penarikanSaldo() {
+// kalkulasi saldo
+// parameter jenisTransfer untuk jenis transfer yang akan dilakukan
+// parameter isTransfer berisi 1 atau 0, 0 = dikurang, 1 = ditambah berdasarkan index nasabah yang akan ditransferr
+string kalkulasiSaldo(string jenisTransfer, int isTransfer) {
     int tarikSaldo;
     cout << "\n1. Rp.50.000 \t2. Rp.100.000 \n3. Rp.500.000 \t4. Rp.1.000.000 \n";
     
-    cout << "Silahkan pilih jumlah penarikkan: ";
+    cout << "Silahkan pilih jumlah " << jenisTransfer << ": ";
     cin >> tarikSaldo;
 
     if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo - 1])) {
-        cout << "\nSaldo anda tidak mencukupi.\n";
-        return;
+        return "\nSaldo anda tidak mencukupi.\n";
     }
+    
+    if(isTransfer) nasabah[isTransfer].saldo += penarikanDana[tarikSaldo - 1];
     nasabah[nasabahIndex].saldo -= penarikanDana[tarikSaldo - 1];
-    updateDatabaseFile();
-    cout << "\nTransaksi Berhasil.\n";
-    return;
+
+    if (!updateDatabaseFile()) return "\nTransaksi gagal.\n";
+    return "\nTransaksi Berhasil.\n";;
 }
 
-void checkNoRekening() {
+string transferSaldo() {
     string rekeningTujuan;
+    string message;
     cout << "Masukkan No Rekening tujuan: ";
-    getline(cin, rekeningTujuan);
+    getline(cin >> ws, rekeningTujuan);
     
+    
+    for (int i = 0; i < totalNasabah; i++) {
+        if(nasabah[i].noRekening == rekeningTujuan) {
+            message = kalkulasiSaldo("untuk ditransfer", i);
+        }
+    }
+    return message;
 }
