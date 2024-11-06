@@ -12,9 +12,9 @@ const int penarikanDana[4] = {50000, 100000, 500000, 1000000};
 int nasabahIndex;
 
 // bool checkKartu(int kartu);
-bool checkSandi(int kartu, string sandi, int count=1);
+bool checkSandi(int kartu, string sandi, int count = 1);
 int pilihTransaksi();
-int penarikanSaldo();
+void penarikanSaldo();
 
 int main(){
     int kartu;
@@ -107,7 +107,7 @@ int pilihTransaksi() {
 }
 
 void updateDatabaseFile() {
-    ofstream dbFile("db.cpp");  // Membuka file db.cpp untuk ditulis ulang
+    ofstream dbFile("db.cpp");
 
     if (!dbFile.is_open()) {
         cerr << "Error: Program tidak dapat memperbaharui data\n";
@@ -137,7 +137,7 @@ void updateDatabaseFile() {
     dbFile.close();
 }
 
-int penarikanSaldo() {
+void penarikanSaldo() {
     int tarikSaldo;
     cout << "\n1. Rp.50.000 \t2. Rp.100.000 \n3. Rp.500.000 \t4. Rp.1.000.000 \n";
     
@@ -146,10 +146,17 @@ int penarikanSaldo() {
 
     if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo - 1])) {
         cout << "\nSaldo anda tidak mencukupi.\n";
-        return 1;
+        return;
     }
     nasabah[nasabahIndex].saldo -= penarikanDana[tarikSaldo - 1];
     updateDatabaseFile();
     cout << "\nTransaksi Berhasil.\n";
-    return 0;
+    return;
+}
+
+void checkNoRekening() {
+    string rekeningTujuan;
+    cout << "Masukkan No Rekening tujuan: ";
+    getline(cin, rekeningTujuan);
+    
 }
