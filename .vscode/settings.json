@@ -4,6 +4,9 @@
 		"*.js": "javascript",
 		"*.css": "css",
 		"iostream": "cpp",
-		"ostream": "cpp"
+		"ostream": "cpp",
+		"*.tcc": "cpp",
+		"string": "cpp",
+		"istream": "cpp"
 	}
 }
