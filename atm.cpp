@@ -15,7 +15,8 @@ int nasabahIndex;
 void head();
 bool checkSandi(int kartu, int count = 1);
 int pilihTransaksi();
-string kalkulasiSaldo(string jenisTransfer, int isTransfer = -1);
+int displayMenuDana(string jenisTransfer);
+string kalkulasiSaldo(int tarikSaldo, int jenisTransfer, int noRekIndex = -1);
 string transferSaldo();
 int pilihanLainnya();
 void cekSaldo();
@@ -64,7 +65,7 @@ int main(){
 
         int transaksiNumber = pilihTransaksi();
         if(transaksiNumber == 1) {
-            output =  kalkulasiSaldo("penarikan");
+            output =  kalkulasiSaldo(displayMenuDana("penarikan"), 2);
         }
         else if(transaksiNumber == 2) {
            output =  transferSaldo();
@@ -76,6 +77,9 @@ int main(){
             }
             else if(transaksiLainnya == 2) {
                 output = gantiPin();
+            }
+            else if(transaksiLainnya == 3) {
+                output = kalkulasiSaldo(displayMenuDana("untuk disetor "), 3);
             }
         }
 
@@ -185,27 +189,38 @@ int pilihTransaksi() {
     return transaksiNumber;
 }
 
-// kalkulasi saldo
-// parameter jenisTransfer untuk jenis transfer yang akan dilakukan
-// parameter isTransfer berisi 1 atau 0, 0 = dikurang, 1 = ditambah berdasarkan index nasabah yang akan ditransferr
-string kalkulasiSaldo(string jenisTransfer, int isTransfer) {
+int displayMenuDana(string jenisTransfer) {
     int tarikSaldo;
     cout << "\t\t\t1. Rp.50.000 \t2. Rp.100.000 \n\t\t\t3. Rp.500.000 \t4. Rp.1.000.000 \n";
     cout << "\t\t==============================================\n";
     
     cout << "\t\tSilahkan pilih jumlah " << jenisTransfer << ": ";
     cin >> tarikSaldo;
-    if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo - 1])) {
+    return tarikSaldo - 1;
+}
+
+// kalkulasi saldo
+// parameter jenisTransfer untuk jenis transfer yang akan dilakukan
+// parameter isTransfer berisi 1 atau 0, 0 = dikurang, 1 = ditambah berdasarkan index nasabah yang akan ditransferr
+string kalkulasiSaldo(int tarikSaldo, int jenisTransfer, int noRekIndex) {
+    if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo]) && jenisTransfer != 3) {
         return "Saldo anda tidak mencukupi.";
     }
     
-    if(isTransfer >= 0) nasabah[isTransfer].saldo += penarikanDana[tarikSaldo - 1];
-    nasabah[nasabahIndex].saldo -= penarikanDana[tarikSaldo - 1];
+    switch (jenisTransfer)
+    {
+    case 1:
+        nasabah[noRekIndex].saldo += penarikanDana[tarikSaldo];
+    case 2:
+        nasabah[nasabahIndex].saldo -= penarikanDana[tarikSaldo];
+        break;
+    case 3:
+        nasabah[nasabahIndex].saldo += penarikanDana[tarikSaldo];
 
+    }
     updateDatabaseFile();
-    return "Transaksi Berhasil.";;
+    return "    Transaksi Berhasil.";
 }
-
 string transferSaldo() {
     string rekeningTujuan;
     int isValidRekeningIndex = -1;
@@ -225,7 +240,7 @@ string transferSaldo() {
             isValidRekeningIndex = i;
         }
     }
-    if(isValidRekeningIndex >= 0) return kalkulasiSaldo("untuk ditransfer", isValidRekeningIndex);
+    if(isValidRekeningIndex >= 0) return kalkulasiSaldo(displayMenuDana("untuk ditransfer"), 1, isValidRekeningIndex);
     cout << "No rekening yang anda masukkan tidak tersedia, pastikan No Rekening sudah benar!\n\n";
     return transferSaldo();
 }
@@ -238,10 +253,10 @@ int pilihanLainnya() {
             cin.clear();
             cin.ignore(1000, '\n');
         }
-        cout << "\n\t\t1. Cek Saldo\n\t\t2. Ganti Sandi\n";
+        cout << "\n\t\t1. Cek Saldo\n\t\t2. Ganti Sandi\n\t\t3. Setor Tunai\n";
         cout << "\t\t==============================================\n";
         cout << "\t\tSilahkan pilih transaksi: ";
-        if(!(cin >> transaksiNumber) ||transaksiNumber > 2) {
+        if(!(cin >> transaksiNumber) || transaksiNumber > 3) {
             cout << endl << endl;
             cout << "\t\t==============================================\n";
             cout << "\t\t  Transaksi yang ada pilih tidak tersedia\n";
@@ -250,7 +265,7 @@ int pilihanLainnya() {
         }
         system("cls");
         head();
-    } while (transaksiNumber > 2 || cin.fail());
+    } while (transaksiNumber > 3 || cin.fail());
     return transaksiNumber;
 }
 
