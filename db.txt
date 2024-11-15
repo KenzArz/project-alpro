@@ -4,42 +4,48 @@ struct Nasabah {
     string pin;
     string noRekening;
     long saldo;
+    bool isBlocked;
 };
 
 Nasabah nasabah[5] = {
     {
         "Aldi Wijaya",
         "BCA",
-        "121212",
+        "241063",
         "5771328036",
-        100000
+        250000,
+        1
     },
     {
         "Adil Nugroho",
         "BCA",
         "617283",
         "5771384296",
-        150000
+        250000,
+        0
     },
     {
         "Sakha",
         "BRI",
         "291820",
         "522101960521230",
-        2500000
+        2500000,
+        0
     },
     {
         "Bajang",
         "BTN",
         "621839",
         "57768505645",
-        4250000
+        4250000,
+        0
     },
     {
         "Alfi",
         "BNI",
         "245210",
         "46266611",
-        5240000
+        5240000,
+        0
     }
 };
