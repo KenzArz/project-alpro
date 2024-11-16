@@ -1,0 +1,51 @@
+struct Nasabah {
+    string nama;
+    string kartu;
+    string pin;
+    string noRekening;
+    long saldo;
+    bool isBlocked;
+};
+
+Nasabah nasabah[5] = {
+    {
+        "Aldi Wijaya",
+        "BCA",
+        "241063",
+        "5771328036",
+        450000,
+        0
+    },
+    {
+        "Adil Nugroho",
+        "BCA",
+        "617283",
+        "5771384296",
+        300000,
+        0
+    },
+    {
+        "Sakha",
+        "BRI",
+        "291820",
+        "522101960521230",
+        2500000,
+        0
+    },
+    {
+        "Bajang",
+        "BTN",
+        "621839",
+        "57768505645",
+        5250000,
+        0
+    },
+    {
+        "Alfi",
+        "BNI",
+        "245210",
+        "46266611",
+        3740000,
+        0
+    }
+};
