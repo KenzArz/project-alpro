@@ -1,26 +1,30 @@
 #include <iostream>
-#include <string>
 #include <fstream>
 
 using namespace std;
 #include "db.txt"
 
-const string endTask = "program berakhir";
+int nasabahIndex;
 const int totalNasabah = 5;
 const string kartuATM[4] = {"BCA", "BRI", "BTN", "BNI"};
 const int penarikanDana[4] = {50000, 100000, 500000, 1000000};
-int nasabahIndex;
 
-// bool checkKartu(int kartu);
+// function tipe data void;
 void head();
-bool checkSandi(int kartu, int count = 1);
-int pilihTransaksi();
-int displayMenuDana(string jenisTransfer);
-string transferSaldo();
-int pilihanLainnya();
 void cekSaldo();
+
+// function tipe data boolean
+bool checkSandi(int kartu, int count = 1);
+
+// function tipe data integer
+int pilihTransaksi();
+int pilihanLainnya();
+int displayMenuDana(string jenisTransaksi);
+
+// function tipe data string
 string gantiPin();
-string kalkulasiSaldo(int tarikSaldo, int jenisTransfer, int noRekIndex = -1);
+string transferSaldo();
+string kalkulasiSaldo(int tarikSaldo, int jenisTransaksi, int noRekIndex = -1);
 
 int main(){
     int kartu;
@@ -34,53 +38,54 @@ int main(){
 
     // Program berakhir ketika ATM tidak valid
     if(!(cin >> kartu) || kartu > 4) {
-        cout << "\t\t   Kartu ATM yang anda masukkan tidak valid\n";
-        cout << "\n\t\t\t      " << endTask;
-        return 1;
-    };    
-
-    // Menjanlankan function checkSandi
-    // User memasukkan sandi
-    // Program berakhir ketika sandi tidak valid
-    if(!checkSandi(kartu) || nasabah[nasabahIndex].isBlocked) {
         cout << endl << endl;
         cout << "\t\t==============================================\n";
-        cout << "\t\t       Kartu ATM Anda Telah Diblokir.\n";
-        cout << "\t\t==============================================\n\n";
-        cout << endTask << endl;
-        system("pause");
+        cout << "\t\t   Kartu ATM yang anda masukkan tidak valid\n";
+        cout << "\t\t==============================================\n";
         return 1;
     };
-
-    cout << nasabah[nasabahIndex].isBlocked;
     
     char repeat;
     do
     {
-        system("cls");
-        head();
+        // Menjanlankan function checkSandi
+        // User memasukkan sandi
+        // Program berakhir ketika sandi tidak valid
+        if(!checkSandi(kartu) || nasabah[nasabahIndex].isBlocked) {
+            cout << endl << endl;
+            cout << "\t\t==============================================\n";
+            cout << "\t\t         Kartu ATM Anda Telah Diblokir.\n";
+            cout << "\t\t==============================================\n\n";
+            continue;
+        };
 
-        repeat = 0;
+        system("cls"); //terminal "dibersihkan"
+        head(); //menampilkan header dari atm el-kbmn
+
         string output;
 
         int transaksiNumber = pilihTransaksi();
-        if(transaksiNumber == 1) {
-            output =  kalkulasiSaldo(displayMenuDana("penarikan"), 2);
-        }
-        else if(transaksiNumber == 2) {
-           output =  transferSaldo();
-        }
-        else if(transaksiNumber == 3) {
+        switch (transaksiNumber) {
+        case 1:
+            output = kalkulasiSaldo(displayMenuDana("penarikan"), 2);
+            break;
+        case 2:
+            output = transferSaldo();
+            break;
+        case 3:
             int transaksiLainnya = pilihanLainnya();
-            if(transaksiLainnya == 1) {
+            switch (transaksiLainnya) {
+            case 1:
                 cekSaldo();
-            }
-            else if(transaksiLainnya == 2) {
+                break;
+            case 2:
                 output = gantiPin();
-            }
-            else if(transaksiLainnya == 3) {
+                break;
+            case 3:
                 output = kalkulasiSaldo(displayMenuDana("untuk disetor "), 3);
+                break;
             }
+            break;
         }
 
         cout << endl << endl;
@@ -92,6 +97,16 @@ int main(){
         cin >> repeat;
         
     } while (repeat == 'y');
+
+    system("pause");
+    system("cls");
+    head();
+    
+    cout << "\t\t  " << "Terima Kasih Telah Menggunakan ATM EL-KBMN";
+    cout << endl << endl;
+    cout << "\t\t==============================================\n";
+    cout << "\t\t\t\t" << "PROGRAM BERAKHIR" << endl;
+    cout << "\t\t==============================================\n";
 
     system("pause");
     return 0;
@@ -128,14 +143,15 @@ void updateDatabaseFile() {
         dbFile << "    }" << (i < totalNasabah - 1 ? "," : "") << "\n";
     }
     dbFile << "};\n";
-
     dbFile.close();
 }
 
 bool checkSandi(int kartu, int count) {
     string sandi;
+
     system("cls");
     head();
+    
     cout << "\t\t\tSilahkan masukkan kata sandi:\n\t\t\t\t    ";
     getline(cin >> ws, sandi);
 
@@ -146,19 +162,23 @@ bool checkSandi(int kartu, int count) {
             nasabahIndex = i;
         }
     }
+
     if(!isValidSandi && count < 3) {
         count++;
+        
         cout << endl << endl;
         cout << "\t\t==============================================\n";
         cout << "\t\t     Sandi yang anda masukkan tidak valid\n";
         cout << "\t\t==============================================\n\n";
+
         system("pause");
         return checkSandi(kartu, count);
     }
-    if(count == 3 && !isValidSandi) {
+    else if(count == 3 && !isValidSandi) {
         nasabah[nasabahIndex].isBlocked = true;
         updateDatabaseFile();
     }
+
     return isValidSandi;
 }
 
@@ -189,25 +209,37 @@ int pilihTransaksi() {
     return transaksiNumber;
 }
 
-int displayMenuDana(string jenisTransfer) {
+int displayMenuDana(string jenisTransaksi) {
     int tarikSaldo;
     cout << "\t\t\t1. Rp.50.000 \t2. Rp.100.000 \n\t\t\t3. Rp.500.000 \t4. Rp.1.000.000 \n";
     cout << "\t\t==============================================\n";
     
-    cout << "\t\tSilahkan pilih jumlah " << jenisTransfer << ": ";
-    cin >> tarikSaldo;
+    cout << "\t\tSilahkan pilih jumlah " << jenisTransaksi << ": ";
+    if(!(cin >> tarikSaldo) || tarikSaldo > 4) {
+        cout << endl << endl;
+        cout << "\t\t==============================================\n";
+        cout << "\t\t  Pilihan yang anda masukkan tidak tersedia\n";
+        cout << "\t\t==============================================\n";
+
+        system("pause");
+        system("cls");
+        head();
+
+        cin.clear();
+        cin.ignore(1000, '\n');
+        return displayMenuDana(jenisTransaksi);
+    };
     return tarikSaldo - 1;
 }
 
 // kalkulasi saldo
-// parameter jenisTransfer untuk jenis transfer yang akan dilakukan
-// parameter isTransfer berisi 1 atau 0, 0 = dikurang, 1 = ditambah berdasarkan index nasabah yang akan ditransferr
-string kalkulasiSaldo(int tarikSaldo, int jenisTransfer, int noRekIndex) {
-    if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo]) && jenisTransfer != 3) {
+// parameter jenisTransaksi untuk jenis transfer yang akan dilakukan
+string kalkulasiSaldo(int tarikSaldo, int jenisTransaksi, int noRekIndex) {
+    if(!(nasabah[nasabahIndex].saldo >= penarikanDana[tarikSaldo]) && jenisTransaksi != 3) {
         return "Saldo anda tidak mencukupi.";
     }
     
-    switch (jenisTransfer)
+    switch (jenisTransaksi)
     {
     case 1:
         nasabah[noRekIndex].saldo += penarikanDana[tarikSaldo];
@@ -224,6 +256,7 @@ string kalkulasiSaldo(int tarikSaldo, int jenisTransfer, int noRekIndex) {
 string transferSaldo() {
     string rekeningTujuan;
     int isValidRekeningIndex = -1;
+    
     cout << "\t\t\tMasukkan No Rekening tujuan:\n\t\t\t\t  ";
     getline(cin >> ws, rekeningTujuan);
 
@@ -232,6 +265,7 @@ string transferSaldo() {
         cout << "\t\t==============================================\n";
         cout << "\t\tAnda tidak bisa melakukan transfer menggunakan\n\t\t\t      No.Rek anda sendiri\n";
         cout << "\t\t==============================================\n";
+        
         system("pause");
         system("cls");
         head();
@@ -253,22 +287,27 @@ string transferSaldo() {
     cout << "\t\t==============================================\n";
     cout << "\t\tNo rekening yang anda masukkan tidak tersedia\n\t\t\tpastikan No Rekening sudah benar!\n";
     cout << "\t\t==============================================\n";
+
     system("pause");
     system("cls");
     head();
+
     return transferSaldo();
 }
 
 int pilihanLainnya() {
     int transaksiNumber;
+
     do
     {
         if(cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
         }
+
         cout << "\t\t1. Cek Saldo\n\t\t2. Ganti Sandi\n\t\t3. Setor Tunai\n";
         cout << "\t\t==============================================\n";
+        
         cout << "\t\tSilahkan pilih transaksi: ";
         if(!(cin >> transaksiNumber) || transaksiNumber > 3) {
             cout << endl << endl;
@@ -277,9 +316,11 @@ int pilihanLainnya() {
             cout << "\t\t==============================================\n";
             system("pause");
         }
+        
         system("cls");
         head();
     } while (transaksiNumber > 3 || cin.fail());
+
     return transaksiNumber;
 }
 
@@ -294,6 +335,7 @@ string gantiPin() {
     string pinBaru[2];
     string number = "0123456789";
     bool isValidNumber;
+    
     do
     {
         cout << "\t\t\t      Masukkan pin baru:\n\t\t\t\t    ";
@@ -304,7 +346,10 @@ string gantiPin() {
             cout << "\t\t==============================================\n";
             cout << "\t\t          PIN harus berisi 6 angka\n";
             cout << "\t\t==============================================\n";
+
             system("pause");
+            system("cls");
+            head();
             continue;
         }
         for(int i = 0; i < pinBaru[0].length(); i ++) {
@@ -319,7 +364,10 @@ string gantiPin() {
                 cout << "\t\t==============================================\n";
                 cout << "\t\t           PIN harus berisi angka\n";
                 cout << "\t\t==============================================\n";
+                
                 system("pause");
+                system("cls");
+                head();
                 break;
             }
         }
@@ -337,12 +385,15 @@ string gantiPin() {
             cout << "\t\t==============================================\n";
             cout << "\t\t  PIN yang anda masukkan tidak sesuai\n";
             cout << "\t\t==============================================\n";
+
             system("pause");
             continue;
         }
         
     } while (pinBaru[0].length() != 6 || !isValidNumber || pinBaru[0] != pinBaru[1]);
+
     nasabah[nasabahIndex].pin = pinBaru[0];
     updateDatabaseFile();
+    
     return "  PIN berhasil diganti.";
 };
