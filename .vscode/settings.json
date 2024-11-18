@@ -1,6 +1,8 @@
 {
-    "files.associations": {
-        "*.tcc": "cpp",
-        "*.txt": "cpp"
-    }
+  "files.associations": {
+    "*.tcc": "cpp",
+    "*.txt": "cpp",
+    "istream": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "disabled"
 }
