@@ -238,7 +238,7 @@ int pilihTransaksi()
         cout << "\t\tSilahkan pilih transaksi: ";
 
         // nasabah memilih angka 1 - 3, jika memilih karakter atau angka lebih dari 3 maka akan masuk ke kondisi pilihan tidak tersedia
-        if (!(cin >> transaksiNumber) || transaksiNumber > 3)
+        if (!(cin >> transaksiNumber) || transaksiNumber > 3 || transaksiNumber == 0)
         {
             cout << endl
                  << endl;
@@ -249,7 +249,7 @@ int pilihTransaksi()
         }
         system("cls"); // system akan menghapus semua isi terminal
         head();        // memanggil header
-    } while (transaksiNumber > 3 || cin.fail());
+    } while (transaksiNumber > 3 || cin.fail() || transaksiNumber == 0);
 
     return transaksiNumber;
 }
@@ -264,7 +264,7 @@ int displayMenuDana(string jenisTransaksi)
     cout << "\t\tSilahkan pilih jumlah " << jenisTransaksi << ": "; // jenisTransaksi akan diisi tergantung dengan transaksi apa yang sedang diingikan nasabah
 
     // nasabah memilih angka 1 - 4, jika memilih karakter atau angka lebih dari 4 maka akan masuk ke kondisi pilihan tidak tersedia
-    if (!(cin >> tarikSaldo) || tarikSaldo > 4)
+    if (!(cin >> tarikSaldo) || tarikSaldo > 4 || tarikSaldo == 0)
     {
         cout << endl
              << endl;
@@ -380,7 +380,7 @@ int pilihanLainnya()
         cout << "\t\tSilahkan pilih transaksi: ";
 
         // nasabah memilih angka 1 - 3, jika memilih karakter atau angka lebih dari 3 maka akan masuk ke kondisi pilihan tidak tersedia
-        if (!(cin >> transaksiNumber) || transaksiNumber > 3)
+        if (!(cin >> transaksiNumber) || transaksiNumber > 3 || transaksiNumber == 0)
         {
             cout << endl
                  << endl;
@@ -392,7 +392,7 @@ int pilihanLainnya()
 
         system("cls"); // system akan menghapus semua isi terminal
         head();        // memanggil header
-    } while (transaksiNumber > 3 || cin.fail());
+    } while (transaksiNumber > 3 || cin.fail() || transaksiNumber == 0);
 
     return transaksiNumber;
 }
