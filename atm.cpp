@@ -39,14 +39,14 @@ int main()
     cout << "\t\tMasukkan kartu ATM berdasarkan nomor di atas: ";
 
     // Program berakhir ketika ATM tidak valid
-    if (!(cin >> kartu) || kartu > 5 || kartu == 0)
+    if (!(cin >> kartu) || kartu > 5 || kartu <= 0)
     {
         cout << endl
              << endl;
         cout << "\t\t==============================================\n";
         cout << "\t\t   Kartu ATM yang anda masukkan tidak valid\n";
         cout << "\t\t==============================================\n";
-        return 0;
+        return 1;
     };
 
     char repeat;
@@ -238,7 +238,7 @@ int pilihTransaksi()
         cout << "\t\tSilahkan pilih transaksi: ";
 
         // nasabah memilih angka 1 - 3, jika memilih karakter atau angka lebih dari 3 maka akan masuk ke kondisi pilihan tidak tersedia
-        if (!(cin >> transaksiNumber) || transaksiNumber > 3 || transaksiNumber == 0)
+        if (!(cin >> transaksiNumber) || transaksiNumber > 3 || transaksiNumber <= 0)
         {
             cout << endl
                  << endl;
@@ -249,7 +249,7 @@ int pilihTransaksi()
         }
         system("cls"); // system akan menghapus semua isi terminal
         head();        // memanggil header
-    } while (transaksiNumber > 3 || cin.fail() || transaksiNumber == 0);
+    } while (transaksiNumber > 3 || cin.fail() || transaksiNumber <= 0);
 
     return transaksiNumber;
 }
@@ -380,7 +380,7 @@ int pilihanLainnya()
         cout << "\t\tSilahkan pilih transaksi: ";
 
         // nasabah memilih angka 1 - 3, jika memilih karakter atau angka lebih dari 3 maka akan masuk ke kondisi pilihan tidak tersedia
-        if (!(cin >> transaksiNumber) || transaksiNumber > 3 || transaksiNumber == 0)
+        if (!(cin >> transaksiNumber) || transaksiNumber > 3 || transaksiNumber <= 0)
         {
             cout << endl
                  << endl;
@@ -392,7 +392,7 @@ int pilihanLainnya()
 
         system("cls"); // system akan menghapus semua isi terminal
         head();        // memanggil header
-    } while (transaksiNumber > 3 || cin.fail() || transaksiNumber == 0);
+    } while (transaksiNumber > 3 || cin.fail() || transaksiNumber <= 0);
 
     return transaksiNumber;
 }
