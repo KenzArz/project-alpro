@@ -39,14 +39,14 @@ int main()
     cout << "\t\tMasukkan kartu ATM berdasarkan nomor di atas: ";
 
     // Program berakhir ketika ATM tidak valid
-    if (!(cin >> kartu) || kartu > 5)
+    if (!(cin >> kartu) || kartu > 5 || kartu == 0)
     {
         cout << endl
              << endl;
         cout << "\t\t==============================================\n";
         cout << "\t\t   Kartu ATM yang anda masukkan tidak valid\n";
         cout << "\t\t==============================================\n";
-        return 1;
+        return 0;
     };
 
     char repeat;
@@ -62,7 +62,7 @@ int main()
             cout << "\t\t==============================================\n";
             cout << "\t\t         Kartu ATM Anda Telah Diblokir.\n";
             cout << "\t\t==============================================\n\n";
-            continue;
+            break;
         };
 
         system("cls"); // system akan menghapus semua isi terminal
@@ -182,13 +182,15 @@ bool checkSandi(int kartu, int count)
     // melakukan looping untuk mengecek kata sandi dan kartu yang sesuai dengan apa yang sudah dimasukkan nasabah
     for (int i = 0; i < totalNasabah; i++)
     {
-        if (kartuATM[kartu - 1] == nasabah[i].kartu) {
+        if (kartuATM[kartu - 1] == nasabah[i].kartu)
+        {
             nasabahIndex = i;
 
-            if (nasabah[i].pin == sandi) {
+            if (nasabah[i].pin == sandi)
+            {
                 isValidSandi = true;
-                break; //keluar dari looping secara paksa
-        }
+                break; // keluar dari looping secara paksa
+            }
         }
     }
 
@@ -294,7 +296,7 @@ string kalkulasiSaldo(int tarikSaldo, int jenisTransaksi, int noRekIndex)
     {
     case 1:                                                     //// Opsi 1 adalah ketika nasabah memilih transfer
         nasabah[noRekIndex].saldo += penarikanDana[tarikSaldo]; // keyword break ditiadakan, agar saldo nasabah saat ini bisa dikalkulasi di kondisi selanjutnya
-    case 2:                                                     // Opsi 21 adalah ketika nasabah memilih tarik saldo atau mengurangi saldo setelah melakukan transfer
+    case 2:                                                     // Opsi 2 adalah ketika nasabah memilih tarik saldo atau mengurangi saldo setelah melakukan transfer
         nasabah[nasabahIndex].saldo -= penarikanDana[tarikSaldo];
         break;
     case 3: // Opsi 1 adalah ketika nasabah memilih setor tunai
@@ -441,6 +443,7 @@ string gantiPin()
                 if (number[j] == pinBaru[0][i])
                 {
                     isValidNumber = true; // jika terdapat karakter yang sama maka variable isValidNumber bernilai true
+                    break;
                 }
             }
 
