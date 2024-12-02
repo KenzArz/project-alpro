@@ -71,6 +71,7 @@ int main()
         string output; // menyimpan pesan teks dari setiap transaksi
 
         int transaksiNumber = pilihTransaksi(); // memilih transaksi
+
         switch (transaksiNumber)
         {
         case 1: // Opsi 1 adalah ketika nasabah memilih tarik saldo
